@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  postgres:
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    image: "postgres:14"
+    container_name: banco-de-dados
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - projeto-network
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+  
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: app-flask
+    volumes:
+      - ./app:/app
+    networks:
+      - projeto-network
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+
+networks:
+  projeto-network:
+    driver: bridge
