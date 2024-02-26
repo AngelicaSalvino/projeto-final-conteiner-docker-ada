@@ -22,6 +22,7 @@ services:
     build:
       context: ./app
       dockerfile: Dockerfile
+    image: "flask"
     container_name: app-flask
     volumes:
       - ./app:/app
